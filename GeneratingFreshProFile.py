@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 #boilerplate =["#!/usr/bin/env bash\n","\n","#SBATCH --time=5:00:00 \n","#SBATCH --nodes=1 \n","#SBATCH --ntasks-per-node=10\n","#SBATCH --mem=16g\n",f"#SBATCH --job-name=run{lower_shortname}_1\n","#SBATCH --mail-type=ALL\n","#SBATCH --mail-user=duck.18@osu.edu\n","\n","ml idl\n","source ~/source.sh\n"]
 
 
-def MakeProFile(ticID,shortname,dirpath='',templatefile ='../templatepro.txt'):
+def MakeProFile(ticID,shortname,dirpath='',templatefile =''):
     """
         Creates a PRO file for EXOFASTv2.
 
@@ -16,6 +16,8 @@ def MakeProFile(ticID,shortname,dirpath='',templatefile ='../templatepro.txt'):
             shortname: The name of the system.
             subdirpath: string subdirectories for exofast file path
                         example format f"['Benchmark','{shortname}','SetupFiles']"
+            templatefile: If you would like to use your own file as a template put file path here
+                        example: '../templatepro.txt'
 
         Returns:
             None.
