@@ -448,15 +448,15 @@ def create_light_curve(target, author, sector, period=None, duration=None, tc=No
             plt.show()
             plt.close()
 
-        #Plotting the phase folded light curve to easily observe transit
-        fig4, ax4 = plt.subplots(figsize=(16, 8))
-        plt.scatter(phase[in_transit], flat_flux[in_transit])
-        plt.title("%s: Sector %s, %ss %s - Phase Folded Light Curve" % (targetname,sector,int(exposure),binflag)) 
-        plt.xlabel("Phase")
-        plt.ylabel("Normalized Fluxf")
-        #plt.xlim(min(phase[in_transit]),max(phase[in_transit]))
-        #plt.ylim(0.99,1.01)
-        
+    #Plotting the phase folded light curve to easily observe transit
+    fig4, ax4 = plt.subplots(figsize=(16, 8))
+    plt.scatter(phase[in_transit], flat_flux[in_transit])
+    plt.title("%s: Sector %s, %ss %s - Phase Folded Light Curve" % (targetname,sector,int(exposure),binflag)) 
+    plt.xlabel("Phase")
+    plt.ylabel("Normalized Fluxf")
+    #plt.xlim(min(phase[in_transit]),max(phase[in_transit]))
+    #plt.ylim(0.99,1.01)
+    
         
 
     # Saving data files of masked light curve, phase folded light curve, and light curve 
@@ -466,55 +466,58 @@ def create_light_curve(target, author, sector, period=None, duration=None, tc=No
 
         if outputdir=='None':
 
-            if os.path.exists('./lc_output') == False:
-                os.mkdir('./lc_output')
+            if os.path.exists('./Data') == False:
+                os.mkdir('./Data')
             
             if ('plot' in outputfiles) or (outputfiles == 'all'):
-                fig4.savefig('lc_output/%s_S%s_phase_folded_%ss%s.png' % (targetname,sector,int(exposure),binflag),dpi=400, bbox_inches="tight",format='png',facecolor='white')
+                fig4.savefig('Data/%s_S%s_phase_folded_%ss%s.png' % (targetname,sector,int(exposure),binflag),dpi=400, bbox_inches="tight",format='png',facecolor='white')
             
             if ('fullnotflat' in outputfiles) or (outputfiles == 'all'):
-                np.savetxt('lc_output/n%s.TESS.TESS.%sFullNotFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
+                np.savetxt('Data/n%s.TESS.TESS.%sFullNotFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
                         np.c_[time, flux, errors], delimiter=' ')
             if ('fullflat' in outputfiles) or (outputfiles == 'all'):
-                np.savetxt('lc_output/n%s.TESS.TESS.%sFullFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
+                np.savetxt('Data/n%s.TESS.TESS.%sFullFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
                         np.c_[time, flat_flux, errors], delimiter=' ')
             if ('slimflat' in outputfiles) or (outputfiles == 'all'):
-                np.savetxt('lc_output/n%s.TESS.TESS.%sSlimFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
+                np.savetxt('Data/n%s.TESS.TESS.%sSlimFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
                         np.c_[time[in_transit], flat_flux[in_transit], errors[in_transit]], delimiter=' ')
             if ('fullnotrans' in outputfiles) or (outputfiles=='all'):
-                np.savetxt('lc_output/n%s.TESS.TESS.%sFullNoTrans.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
+                np.savetxt('Data/n%s.TESS.TESS.%sFullNoTrans.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
                         np.c_[time[out_of_transit], flux[out_of_transit], errors[out_of_transit]], delimiter=' ')
             
             # save individual transits to separate files
             if ('individual' in outputfiles) or (outputfiles == 'all'):
                 for key, value in final_transits.items():
                     newvalue = np.array(value)
-                    np.savetxt('lc_output/n%s.TESS.TESS.%sSlimFlat.S%s.%ss%s.%s.dat' % (date,targetname, sector,int(exposure),binflag, key), \
+                    np.savetxt('Data/n%s.TESS.TESS.%sSlimFlat.S%s.%ss%s.%s.dat' % (date,targetname, sector,int(exposure),binflag, key), \
                             np.c_[(phase[newvalue[0,:]]*period), flat_flux[newvalue[0,:]]], delimiter=' ')
 
         else:
-            if os.path.exists(outputdir+'/lc_output') == False:
-                os.mkdir(outputdir+'/lc_output')
+            if os.path.exists(outputdir+'/Data') == False:
+                os.mkdir(outputdir+'/Data')
 
             if ('plot' in outputfiles) or (outputfiles == 'all'):
-                fig4.savefig(outputdir+'lc_output/%s_S%s_phase_folded_%ss%s.png' % (targetname,sector,int(exposure),binflag),dpi=400, bbox_inches="tight",format='png',facecolor='white')
+                fig4.savefig(outputdir+'Data/%s_S%s_phase_folded_%ss%s.png' % (targetname,sector,int(exposure),binflag),dpi=400, bbox_inches="tight",format='png',facecolor='white')
             
             if ('fullnotflat' in outputfiles) or (outputfiles == 'all'):
-                np.savetxt(outputdir+'lc_output/n%s.TESS.TESS.%sFullNotFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
+                np.savetxt(outputdir+'Data/n%s.TESS.TESS.%sFullNotFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
                         np.c_[time, flux, errors], delimiter=' ')
             if ('fullflat' in outputfiles) or (outputfiles == 'all'):
-                np.savetxt(outputdir+'lc_output/n%s.TESS.TESS.%sFullFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
+                np.savetxt(outputdir+'Data/n%s.TESS.TESS.%sFullFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
                         np.c_[time, flat_flux, errors], delimiter=' ')
             if ('slimflat' in outputfiles) or (outputfiles == 'all'):
-                np.savetxt(outputdir+'lc_output/n%s.TESS.TESS.%sSlimFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
+                np.savetxt(outputdir+'Data/n%s.TESS.TESS.%sSlimFlat.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
                         np.c_[time[in_transit], flat_flux[in_transit], errors[in_transit]], delimiter=' ')
             if ('fullnotrans' in outputfiles) or (outputfiles=='all'):
-                np.savetxt(outputdir+'lc_output/n%s.TESS.TESS.%sFullNoTrans.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
+                np.savetxt(outputdir+'Data/n%s.TESS.TESS.%sFullNoTrans.S%s.%ss%s.dat' % (date,targetname, sector,int(exposure),binflag), \
                         np.c_[time[out_of_transit], flux[out_of_transit], errors[out_of_transit]], delimiter=' ')
             
             # save individual transits to separate files
             if ('individual' in outputfiles) or (outputfiles == 'all'):
                 for key, value in final_transits.items():
                     newvalue = np.array(value)
-                    np.savetxt(outputdir+'lc_output/n%s.TESS.TESS.%sSlimFlat.S%s.%ss%s.%s.dat' % (date,targetname, sector,int(exposure),binflag, key), \
+                    np.savetxt(outputdir+'Data/n%s.TESS.TESS.%sSlimFlat.S%s.%ss%s.%s.dat' % (date,targetname, sector,int(exposure),binflag, key), \
                             np.c_[(phase[newvalue[0,:]]*period), flat_flux[newvalue[0,:]]], delimiter=' ')
+    print()
+
+
