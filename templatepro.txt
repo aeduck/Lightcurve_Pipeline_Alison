@@ -1,0 +1,14 @@
+pro Q_Y, debug=debug, verbose=verbose, maxsteps=maxsteps, nthin=nthin
+if n_elements(maxsteps) eq 0 then maxsteps = 15000
+if n_elements(nthin) eq 0 then nthin=50
+path = filepath('',root_dir=getenv('EXOFAST_PATH'),subdir={dirpath})
+exofastv2, nplanets=1, $
+	tranpath=path+'../Data/*FullFlat.dat', $
+	rvpath=path+'../Data/*.rv',$
+	priorfile=path+'Z.priors.Y', $
+	prefix=path+'../Results/fitZ_Y' + path_sep()+'fitZ_Y.', $
+	maxsteps=maxsteps,$
+	thin=nthin, nthreads = 10, ntemps=8, maxtime=10800,$
+	 circular=[0], fittran=[1], fitrv=[1], $
+	debug=debug, verbose=verbose, mistsedfile = path+'../Data/{shortname}.sed'
+end
